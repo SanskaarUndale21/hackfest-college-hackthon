@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-
+export const dynamic = "force-dynamic";
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
