@@ -86,6 +86,8 @@ export function TheCrew() {
               </div>
             ))}
           </div>
+        </div>
+
         {/* Second Faculty — shown last */}
         <div className="text-center mb-16 mt-24">
           <div className="flex flex-wrap justify-center gap-12 lg:gap-16 mt-12">
