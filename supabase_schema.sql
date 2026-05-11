@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS registrations (
   id                    uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at            timestamptz DEFAULT now() NOT NULL,
 
+  -- Team Identity
+  team_name             text NOT NULL,
+
   -- Team Leader
   leader_name           text NOT NULL,
   leader_email          text NOT NULL,
@@ -23,8 +26,8 @@ CREATE TABLE IF NOT EXISTS registrations (
   -- Problem Statement chosen
   problem_statement     text NOT NULL,
 
-  -- Team Members (array of objects: name, email, phone, usn, branch)
-  -- Example: [{"name":"Alice","email":"a@x.com","phone":"9876543210","usn":"1SG24AI001","branch":"AI&DS"}]
+  -- Team Members (array of objects: name, email, phone, usn, branch, year)
+  -- Example: [{"name":"Alice","email":"a@x.com","phone":"9876543210","usn":"1SG24AI001","branch":"AI&DS","year":"2nd Year"}]
   members               jsonb DEFAULT '[]'::jsonb,
 
   -- Payment
@@ -38,6 +41,7 @@ CREATE TABLE IF NOT EXISTS registrations (
 -- Index for quick email lookups
 CREATE INDEX IF NOT EXISTS idx_registrations_leader_email ON registrations (leader_email);
 CREATE INDEX IF NOT EXISTS idx_registrations_status ON registrations (status);
+CREATE INDEX IF NOT EXISTS idx_registrations_team_name ON registrations (team_name);
 
 -- ─────────────────────────────────────────────────────────────
 -- 2. ROW LEVEL SECURITY
@@ -97,11 +101,13 @@ CREATE OR REPLACE VIEW registration_summary AS
 SELECT
   id,
   created_at,
+  team_name,
   leader_name,
   leader_email,
   leader_phone,
   leader_college,
   leader_branch,
+  leader_year,
   leader_usn,
   problem_statement,
   jsonb_array_length(members) AS member_count,
@@ -112,14 +118,22 @@ FROM registrations
 ORDER BY created_at DESC;
 
 -- ─────────────────────────────────────────────────────────────
+-- MIGRATION: If table already exists, add team_name column
+-- (Run only if upgrading an existing deployment)
+-- ─────────────────────────────────────────────────────────────
+-- ALTER TABLE registrations ADD COLUMN IF NOT EXISTS team_name text NOT NULL DEFAULT 'Team Unknown';
+
+-- ─────────────────────────────────────────────────────────────
 -- EXAMPLE INSERT (for testing)
 -- ─────────────────────────────────────────────────────────────
 /*
 INSERT INTO registrations (
+  team_name,
   leader_name, leader_email, leader_phone, leader_college,
   leader_branch, leader_year, leader_usn, problem_statement,
   members, transaction_id, payment_screenshot_url
 ) VALUES (
+  'Team Odyssey',
   'Ayman Dehalvi',
   'ayman@sgbit.edu.in',
   '9886936558',
@@ -129,8 +143,8 @@ INSERT INTO registrations (
   '1SG24AI001',
   'PS 1 - Digital Paint Brush App',
   '[
-    {"name":"Amol Kumbhar","email":"amol@sgbit.edu.in","phone":"6360591740","usn":"1SG24AI002","branch":"AI & DS"},
-    {"name":"Sanskaar","email":"sanskaar@sgbit.edu.in","phone":"9999999999","usn":"1SG24AI003","branch":"AI & DS"}
+    {"name":"Amol Kumbhar","email":"amol@sgbit.edu.in","phone":"6360591740","usn":"1SG24AI002","branch":"AI & DS","year":"1st Year"},
+    {"name":"Sanskaar","email":"sanskaar@sgbit.edu.in","phone":"9999999999","usn":"1SG24AI003","branch":"AI & DS","year":"1st Year"}
   ]'::jsonb,
   'TXN123456789',
   'https://<project>.supabase.co/storage/v1/object/public/payments/screenshot.jpg'
