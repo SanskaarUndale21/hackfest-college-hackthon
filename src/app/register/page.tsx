@@ -11,14 +11,11 @@ export const dynamic = "force-dynamic";
 
 const YEAR_OPTIONS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 const BRANCH_OPTIONS = [
-  "AI & DS",
-  "Computer Science",
-  "Information Science",
-  "Electronics & Communication",
-  "Mechanical",
-  "Civil",
-  "Electrical",
-  "Other",
+  "CS",
+  "CSBS",
+  "AIDS",
+  "EEE",
+  "EC",
 ];
 
 const PROBLEM_STATEMENTS = [
