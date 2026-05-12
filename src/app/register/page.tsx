@@ -25,6 +25,7 @@ const PROBLEM_STATEMENTS = [
   "PS 4 - Weather Checker",
   "PS 5 - Quiz Game",
   "PS 6 - Typing Speed Tester",
+  "PS 7 - Open Innovation",
 ];
 
 interface Member {
