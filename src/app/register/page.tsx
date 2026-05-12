@@ -20,10 +20,11 @@ const BRANCH_OPTIONS = [
 
 const PROBLEM_STATEMENTS = [
   "PS 1 - Digital Paint Brush App",
-  "PS 2 - Smart Campus Navigator",
-  "PS 3 - Waste Management System",
-  "PS 4 - Health Monitoring Dashboard",
-  "PS 5 - Open Innovation",
+  "PS 2 - Basic Calculator",
+  "PS 3 - Simple Notes App",
+  "PS 4 - Weather Checker",
+  "PS 5 - Quiz Game",
+  "PS 6 - Typing Speed Tester",
 ];
 
 interface Member {
